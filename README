@@ -1,0 +1,23 @@
+This package contains codes that allows us to calculate target mass corrections for deep inelstic scattering structure functions. 
+There is no dependency required to use this code. An example on how to use this code can be found in example/MainTMC.cpp. This code use cubature library ( https://github.com/stevengj/cubature ) to do the integrations of massless structure functions. This code also use 2F1 hypergeometric function code by N. Michel and M.V.Stoitsov ( https://www.sciencedirect.com/science/article/pii/S0010465507004699 ) which is able to calculate analytically continued 2F1 hypergeometric function F(a,b,c,z) for all z. The 2F1 function provided by the GSL library is only able to calculate the function for |z|<1, hence is not used in this package. 
+
+Once succesfully compiled, this package contains two libraries : cubature and TMC. In order to use the TMC library, one must define a class which is able to calculate massless structure functions, which takes the F123M0 class as the parent class and implement all of its virtual functions. Once the structure function class (let's call it F123) is defined and all the F123M0 virtual functions have been implemented, one can declare the TMC object as : 
+ 
+    F123 F ; 
+    TMCs mytmc(&F);
+
+One can calculate, for example, the OPE TMC F2 structure function, at x=0.9, Q=1.5 GeV as :
+
+     mytmc.getOPE_TMCF2 (x, Q);
+
+This will call cubature library to evaluate the H2 and G2 terms, hence the calculation is very slow in general. 
+
+To calculate the parameterized TMC structure function, one can write : 
+
+    mytmc.getPARAM_TMCF2 (x, Q);
+
+and to calculate the leading TMC structure function, one can write : 
+
+    mytmc.getOPELeading_TMCF2 (x, Q);
+
+
